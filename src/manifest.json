@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "name": "Yabumi for Chrome",
+  "version": "0.0.1",
+  "minimum_chrome_version": "32",
+
+  "description": "Speedy screen shot sharing application",
+  "icons": {
+    "16": "img/icon16.png",
+    "48": "img/icon48.png",
+    "128": "img/icon128.png"
+  },
+
+  "browser_action": {
+    "default_icon": {
+      "19": "img/action_icon19.png",
+      "38": "img/action_icon38.png"
+    },
+    "default_title": "Share screen shot via Yabumi"
+  },
+
+  "background": {
+    "scripts": ["main.js"],
+    "persistent": false
+  },
+
+  "permissions": [
+    "tabs",
+    "<all_urls>"
+  ]
+}
