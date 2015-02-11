@@ -46,21 +46,7 @@ function captureVisibleArea(tab) {
             canvasContext = createCanvasContext(screen.width, screen.height);
         })
         .then(captureVisibleTab)
-        .then(function (dataUri) {
-            var img = new Image();
-            var promise = new Promise(function (resolve) {
-                img.onload = function () {
-                    canvasContext.drawImage(img, 0, 0);
-
-                    URL.revokeObjectURL(img.src);
-                    resolve();
-                }
-            });
-
-            img.src = dataUri;
-
-            return promise;
-        })
+        .then(function (dataUri) { return drawToCanvasContext(canvasContext, 0, 0, dataUri);})
         .then(function () {
             return Promise.resolve(canvasContext.canvas.toDataURL('image/png'));
         });
@@ -120,6 +106,22 @@ function createCanvasContext(width, height) {
     c.height = height;
 
     return c.getContext('2d');
+}
+
+function drawToCanvasContext(canvasContext, x, y, dataUri) {
+    var img = new Image();
+    var promise = new Promise(function (resolve) {
+        img.onload = function () {
+            canvasContext.drawImage(img, x, y);
+
+            URL.revokeObjectURL(img.src);
+            resolve();
+        }
+    });
+
+    img.src = dataUri;
+
+    return promise;
 }
 
 function saveToClipboard(string) {
