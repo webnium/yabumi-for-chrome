@@ -6,14 +6,9 @@
 **/
 
 chrome.browserAction.onClicked.addListener(function () {
-    var targetTab;
     var canvasContext;
 
     getCurrentTab()
-        .then(function (tab) {
-            targetTab = tab;
-            return Promise.resolve(tab);
-        })
         .then(executeContentScript)
         .then(measureScreen)
         .then(function (screen) {
