@@ -6,36 +6,11 @@
 **/
 
 chrome.browserAction.onClicked.addListener(function () {
-    var canvasContext;
 
     getCurrentTab()
         .then(executeContentScript)
-        .then(measureScreen)
-        .then(function (screen) {
-            canvasContext = createCanvasContext(screen.width, screen.height);
-
-            return new Promise(function (resolve) {
-                chrome.tabs.captureVisibleTab(null, {format: 'png'}, function (dataUri) {resolve(dataUri)});
-            });
-        })
-        .then(function (dataUri) {
-            var img = new Image();
-            var promise = new Promise(function (resolve) {
-                img.onload = function () {
-                    canvasContext.drawImage(img, 0, 0);
-
-                    URL.revokeObjectURL(img.src);
-                    resolve();
-                }
-            });
-
-            img.src = dataUri;
-
-            return promise;
-        })
-        .then(function () {
-            uploadToYabumi(canvasContext.canvas.toDataURL('image/png'));
-        })
+        .then(captureVisibleArea)
+        .then(uploadToYabumi)
         .catch(function (e) {
             console.log(e);
         });
@@ -60,6 +35,40 @@ chrome.browserAction.onClicked.addListener(function () {
         return new Promise(function (resolve, reject) {
             chrome.tabs.sendMessage(targetTab.id, {name: 'measureScreen'},
                 function (screen) { if (screen) resolve(screen); reject(new Error('Cannot measure screen.'))});
+        });
+    }
+
+    function captureVisibleArea(tab) {
+        var canvasContext;
+
+        return measureScreen(tab)
+            .then(function (screen) {
+                canvasContext = createCanvasContext(screen.width, screen.height);
+            })
+            .then(captureVisibleTab)
+            .then(function (dataUri) {
+                var img = new Image();
+                var promise = new Promise(function (resolve) {
+                    img.onload = function () {
+                        canvasContext.drawImage(img, 0, 0);
+
+                        URL.revokeObjectURL(img.src);
+                        resolve();
+                    }
+                });
+
+                img.src = dataUri;
+
+                return promise;
+            })
+            .then(function () {
+                return Promise.resolve(canvasContext.canvas.toDataURL('image/png'));
+            });
+    }
+
+    function captureVisibleTab() {
+        return new Promise(function (resolve) {
+            chrome.tabs.captureVisibleTab(null, {format: 'png'}, function (dataUri) {resolve(dataUri)});
         });
     }
 
