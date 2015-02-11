@@ -77,9 +77,11 @@ chrome.browserAction.onClicked.addListener(function () {
                 return;
             }
 
+            var response = JSON.parse(xhr.responseText);
             chrome.tabs.create({
-                url: JSON.parse(xhr.responseText).editUrl
+                url: response.editUrl
             });
+            saveToClipboard(response.url);
         });
 
         var formData = new window.FormData();
@@ -114,5 +116,16 @@ chrome.browserAction.onClicked.addListener(function () {
         c.height = height;
 
         return c.getContext('2d');
+    }
+
+    function saveToClipboard(string) {
+        var textArea = document.createElement('textarea');
+        document.body.appendChild(textArea);
+
+        textArea.value = string;
+        textArea.select();
+        document.execCommand("copy");
+
+        document.body.removeChild(textArea);
     }
 });

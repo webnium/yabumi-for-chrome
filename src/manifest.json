@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Yabumi for Chrome",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "minimum_chrome_version": "32",
 
   "description": "Speedy screen shot sharing application",
@@ -35,6 +35,7 @@
   ],
   "permissions": [
     "tabs",
+    "clipboardRead",
     "activeTab",
     "<all_urls>"
   ]
