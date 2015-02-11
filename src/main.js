@@ -5,7 +5,9 @@
  * Licensed under the MIT-License.
 **/
 
-chrome.browserAction.onClicked.addListener(function () {
+chrome.browserAction.onClicked.addListener(doCaptureVisibleArea);
+
+function doCaptureVisibleArea() {
     getCurrentTab()
         .then(executeContentScript)
         .then(captureVisibleArea)
@@ -13,7 +15,7 @@ chrome.browserAction.onClicked.addListener(function () {
         .catch(function (e) {
             console.log(e);
         });
-});
+}
 
 function getCurrentTab() {
     return new Promise(function (resolve, reject) {
