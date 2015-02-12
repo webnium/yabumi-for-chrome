@@ -35,6 +35,10 @@
     "message": "キャプチャに失敗しました",
     "description": "Notification message for capture failure."
   },
+  "captureFailedContextMessage": {
+    "message": "このページはキャプチャできません",
+    "description": "Notification context message for capture failure."
+  },
   "uploadFailed": {
     "message": "アップロードに失敗しました",
     "description": "Notification message for upload failure."

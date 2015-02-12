@@ -35,6 +35,10 @@
     "message": "Capture failed",
     "description": "Notification message for capture failure."
   },
+  "captureFailedContextMessage": {
+    "message": "Cannot capture this page",
+    "description": "Notification context message for capture failure."
+  },
   "uploadFailed": {
     "message": "Upload failed",
     "description": "Notification message for upload failure."

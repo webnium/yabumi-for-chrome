@@ -65,6 +65,27 @@ function doCapture(capture) {
         .catch(onUploadFailure);
 }
 
+function onCaptureFailure(e) {
+    chrome.notifications.create('', {
+        type: 'basic',
+        title: 'Yabumi for Chrome',
+        message: chrome.i18n.getMessage('captureFailed'),
+        contextMessage: chrome.i18n.getMessage('captureFailedContextMessage'),
+        iconUrl: 'img/icon128.png'
+    }, function () {});
+    console.log(e);
+}
+
+function onUploadFailure(e) {
+    chrome.notifications.create('', {
+        type: 'basic',
+        title: 'Yabumi for Chrome',
+        message: chrome.i18n.getMessage('uploadFailed'),
+        iconUrl: 'img/icon128.png'
+    }, function () {});
+    console.log(e);
+}
+
 function captureVisibleArea(tab) {
     var canvasContext;
 
@@ -124,26 +145,6 @@ function captureEntirePage(tab) {
         .then(function () {
             return Promise.resolve(canvasContext.canvas.toDataURL('image/png'));
         });
-}
-
-function onCaptureFailure(e) {
-    chrome.notifications.create('', {
-        type: 'basic',
-        title: 'Yabumi for Chrome',
-        message: chrome.i18n.getMessage('captureFailed'),
-        iconUrl: 'img/icon128.png'
-    }, function () {});
-    console.log(e);
-}
-
-function onUploadFailure(e) {
-    chrome.notifications.create('', {
-        type: 'basic',
-        title: 'Yabumi for Chrome',
-        message: chrome.i18n.getMessage('uploadFailed'),
-        iconUrl: 'img/icon128.png'
-    }, function () {});
-    console.log(e);
 }
 
 function captureVisibleTab() {
