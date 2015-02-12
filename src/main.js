@@ -8,8 +8,9 @@
 chrome.browserAction.onClicked.addListener(doDefaultAction);
 chrome.runtime.onInstalled.addListener(createContextMenus);
 
+var contextMenus;
 function createContextMenus() {
-    var contextMenus = new ContextMenus();
+    contextMenus = new ContextMenus();
 
     contextMenus.create({
         title: chrome.i18n.getMessage('captureVisibleArea'),
