@@ -30,5 +30,13 @@
   "optionDefaultActionDescription": {
     "message": "Choose an action on click Yabumi icon next to location bar.",
     "description": "Description for default action option."
+  },
+  "captureFailed": {
+    "message": "Capture failed",
+    "description": "Notification message for capture failure."
+  },
+  "uploadFailed": {
+    "message": "Upload failed",
+    "description": "Notification message for upload failure."
   }
 }

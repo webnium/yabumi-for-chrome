@@ -53,20 +53,16 @@ function doCaptureVisibleArea() {
     getCurrentTab()
         .then(executeContentScript)
         .then(captureVisibleArea)
-        .then(uploadToYabumi)
-        .catch(function (e) {
-            console.log(e);
-        });
+        .then(uploadToYabumi, onCaptureFailure)
+        .catch(onUploadFailure);
 }
 
 function doCaptureEntirePage() {
     getCurrentTab()
         .then(executeContentScript)
         .then(captureEntirePage)
-        .then(uploadToYabumi)
-        .catch(function (e) {
-            console.log(e);
-        });
+        .then(uploadToYabumi, onCaptureFailure)
+        .catch(onUploadFailure);
 }
 
 function captureVisibleArea(tab) {
@@ -130,6 +126,26 @@ function captureEntirePage(tab) {
         });
 }
 
+function onCaptureFailure(e) {
+    chrome.notifications.create('', {
+        type: 'basic',
+        title: 'Yabumi for Chrome',
+        message: chrome.i18n.getMessage('captureFailed'),
+        iconUrl: 'img/icon128.png'
+    }, function () {});
+    console.log(e);
+}
+
+function onUploadFailure(e) {
+    chrome.notifications.create('', {
+        type: 'basic',
+        title: 'Yabumi for Chrome',
+        message: chrome.i18n.getMessage('uploadFailed'),
+        iconUrl: 'img/icon128.png'
+    }, function () {});
+    console.log(e);
+}
+
 function captureVisibleTab() {
     return new Promise(function (resolve) {
         chrome.tabs.captureVisibleTab(null, {format: 'png'}, function (dataUri) {resolve(dataUri)});
@@ -139,17 +155,21 @@ function captureVisibleTab() {
 function uploadToYabumi(dataUrl) {
     var xhr = new XMLHttpRequest();
     xhr.open('post', 'https://yabumi.cc/api/images.json', true);
-    xhr.addEventListener('load', function () {
-        if (xhr.status !== 201) {
-            // TODO: send message to content script to show alert.
-            return;
-        }
 
-        var response = JSON.parse(xhr.responseText);
-        chrome.tabs.create({
-            url: response.editUrl
+    var promise = new Promise(function (resolve, reject) {
+        xhr.addEventListener('load', function () {
+            if (xhr.status !== 201) {
+                reject();
+                return;
+            }
+
+            var response = JSON.parse(xhr.responseText);
+            chrome.tabs.create({
+                url: response.editUrl
+            });
+            saveToClipboard(response.url);
+            resolve(response);
         });
-        saveToClipboard(response.url);
     });
 
     var formData = new window.FormData();
@@ -157,25 +177,7 @@ function uploadToYabumi(dataUrl) {
 
     xhr.send(formData);
 
-    function dataURItoBlob(dataURI) {
-        // convert base64/URLEncoded data component to raw binary data held in a string
-        var byteString;
-        if (dataURI.split(',')[0].indexOf('base64') >= 0)
-            byteString = atob(dataURI.split(',')[1]);
-        else
-            byteString = unescape(dataURI.split(',')[1]);
-
-        // separate out the mime component
-        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-        // write the bytes of the string to a typed array
-        var ia = new Uint8Array(byteString.length);
-        for (var i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
-        }
-
-        return new Blob([ia], {type:mimeString});
-    }
+    return promise;
 }
 
 function createCanvasContext(width, height) {
@@ -213,3 +215,22 @@ function saveToClipboard(string) {
     document.body.removeChild(textArea);
 }
 
+function dataURItoBlob(dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {type:mimeString});
+}

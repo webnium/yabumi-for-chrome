@@ -45,6 +45,7 @@
     "activeTab",
     "contextMenus",
     "storage",
+    "notifications",
     "<all_urls>"
   ]
 }

@@ -30,5 +30,13 @@
   "optionDefaultActionDescription": {
     "message": "ロケーションバーの横にあるアイコンをクリックしたときの動作を選択",
     "description": "Description for default action option."
+  },
+  "captureFailed": {
+    "message": "キャプチャに失敗しました",
+    "description": "Notification message for capture failure."
+  },
+  "uploadFailed": {
+    "message": "アップロードに失敗しました",
+    "description": "Notification message for upload failure."
   }
 }
