@@ -11,6 +11,8 @@
             .update(chrome.i18n.getMessage('yabumiForChromeOptions'))
             .insertTo(document.body);
 
+        var container = flagrate.createElement('div', {id: 'container'})
+            .insertTo(document.body);
         chrome.storage.sync.get(
             defaultOptions,
             function (options) {
@@ -31,7 +33,7 @@
                         }
                     ]
                 })
-                    .insertTo(document.body);
+                    .insertTo(container);
 
                 var notify = flagrate.createNotify({
                     title: 'Yabumi for Chrome',
@@ -40,6 +42,7 @@
                 var saveButton = flagrate.createButton({
                     color: '@blue',
                     label: chrome.i18n.getMessage('saveOptions'),
+                    id: 'saveOptionsButton',
                     onSelect: function () {
                         saveButton.disable();
                         chrome.storage.sync.set(
@@ -53,7 +56,7 @@
                             }
                         );
                     }
-                }).insertTo(document.body);
+                }).insertTo(container);
             });
     }
 

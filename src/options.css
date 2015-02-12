@@ -1,0 +1,17 @@
+body {
+    background-image: url(img/options_background.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position-x: -100px;
+    background-position-y: -50px;
+    max-width: 940px;
+}
+
+#container {
+    max-width: 640px;
+    float: right;
+}
+
+#saveOptionsButton {
+    margin-top: 20px;
+}
