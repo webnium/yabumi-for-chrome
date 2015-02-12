@@ -14,5 +14,25 @@
   "captureEntirePage": {
     "message": "ページ全体をキャプチャ",
     "description": "Context menu item title for capture entire page."
+  },
+  "yabumiForChromeOptions": {
+    "message": "Yabumi for Chrome の設定",
+    "description": "Title for option page."
+  },
+  "optionDefaultAction": {
+    "message": "デフォルト動作",
+    "description": "Label for default action option."
+  },
+  "optionDefaultActionDescription": {
+    "message": "ロケーションバーの横にあるアイコンをクリックしたときの動作を選択",
+    "description": "Description for default action option."
+  },
+  "saveOptions": {
+    "message": "設定を保存",
+    "description": "Button label for save options."
+  },
+  "optionsSaved": {
+    "message": "設定を保存しました",
+    "description": "Message on options saved."
   }
 }

@@ -36,11 +36,15 @@
       "js": ["content.js"]
     }
   ],
+
+  "options_page": "options.html",
+
   "permissions": [
     "tabs",
     "clipboardRead",
     "activeTab",
     "contextMenus",
+    "storage",
     "<all_urls>"
   ]
 }
