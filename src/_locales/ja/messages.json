@@ -20,7 +20,7 @@
     "description": "Title for option page."
   },
   "optionDefaultAction": {
-    "message": "デフォルト動作",
+    "message": "デフォルトの挙動",
     "description": "Label for default action option."
   },
   "optionDefaultActionDescription": {
