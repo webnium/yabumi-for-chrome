@@ -36,15 +36,7 @@
                     .insertTo(container);
 
                 form.element.on('change', function (){
-                    chrome.storage.sync.set(
-                        form.getResult(),
-                        function () {
-                            notify.create({
-                                icon: 'img/icon48.png',
-                                text: chrome.i18n.getMessage('optionsSaved')
-                            });
-                        }
-                    );
+                    chrome.storage.sync.set(form.getResult());
                 });
             });
     }
