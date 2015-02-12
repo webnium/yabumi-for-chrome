@@ -173,10 +173,13 @@ function uploadToYabumi(dataUrl) {
         });
     });
 
-    var formData = new window.FormData();
-    formData.append('imagedata', dataURItoBlob(dataUrl), 'screen shot');
+    chrome.storage.sync.get(defaultOptions, function (options) {
+        var formData = new window.FormData();
+        formData.append('imagedata', dataURItoBlob(dataUrl), 'screen shot');
+        formData.append('expiresAt', options.defaultDuration ? new Date(Date.now() + options.defaultDuration).toISOString() : null);
 
-    xhr.send(formData);
+        xhr.send(formData);
+    });
 
     return promise;
 }

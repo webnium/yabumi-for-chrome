@@ -5,5 +5,6 @@
  * Licensed under the MIT-License.
  **/
 var defaultOptions = {
-    defaultAction: 'captureVisibleArea'
+    defaultAction: 'captureVisibleArea',
+    defaultDuration: 1000 * 60 * 60 * 24
 };

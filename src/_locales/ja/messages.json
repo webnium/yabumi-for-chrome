@@ -31,6 +31,34 @@
     "message": "ロケーションバーの横にあるアイコンをクリックしたときの動作を選択",
     "description": "Description for default action option."
   },
+  "optionDefaultDuration": {
+    "message": "デフォルト有効期間",
+    "description": "Label for default duration option"
+  },
+  "optionDefaultDurationDescription": {
+    "message": "アップロードするスクリーンショットがYabumiサーバーに存在する期間を選択",
+    "description": "Description for default duration option."
+  },
+  "durationNMinutes" : {
+    "message": "$1 分",
+    "description": "Label for duration N minutes."
+  },
+  "duration1hour": {
+    "message": "1 時間",
+    "description": "Label for duration 1 hour."
+  },
+  "durationNHours": {
+    "message": "$1 時間",
+    "description": "Label for duration N hours."
+  },
+  "durationNDays": {
+    "message": "$1 日",
+    "description": "Label for duration N days."
+  },
+  "durationNoLimit": {
+    "message": "無期限 (1年間アクセスがないと削除されます)",
+    "description": "Label for duration no limit."
+  },
   "captureFailed": {
     "message": "キャプチャに失敗しました",
     "description": "Notification message for capture failure."

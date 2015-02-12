@@ -31,6 +31,34 @@
     "message": "Choose an action on click Yabumi icon next to location bar.",
     "description": "Description for default action option."
   },
+  "optionDefaultDuration": {
+    "message": "Default duration",
+    "description": "Label for default duration option"
+  },
+  "optionDefaultDurationDescription": {
+    "message": "Select duration of uploading screen shot on Yabumi server.",
+    "description": "Description for default duration option."
+  },
+  "durationNMinutes" : {
+    "message": "$1 minute",
+    "description": "Label for duration N minutes."
+  },
+  "duration1hour": {
+    "message": "1 hour",
+    "description": "Label for duration 1 hour."
+  },
+  "durationNHours": {
+    "message": "$1 hours",
+    "description": "Label for duration N hours."
+  },
+  "durationNDays": {
+    "message": "$1 days",
+    "description": "Label for duration N days."
+  },
+  "durationNoLimit": {
+    "message": "No limit (removed if nobody access for 1 years)",
+    "description": "Label for duration no limit."
+  },
   "captureFailed": {
     "message": "Capture failed",
     "description": "Notification message for capture failure."
