@@ -89,7 +89,7 @@ function captureEntirePage(tab) {
                 (function _loop() {
                     scrollTab(tab, left, top)
                         .then(captureVisibleTab)
-                        .then(function (dataUri) { return drawToCanvasContext(canvasContext, left, top, dataUri);})
+                        .then(drawToCanvasContext.bind(null, canvasContext, left, top))
                         .then(function () {
                             if (_hasNext()) {
                                 _forward();
