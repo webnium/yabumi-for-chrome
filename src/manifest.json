@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Yabumi for Chrome",
   "short_name": "Yabumi",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "minimum_chrome_version": "35",
   "author": "Webnium",
   "default_locale": "en",
