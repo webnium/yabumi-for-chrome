@@ -26,13 +26,5 @@
   "optionDefaultActionDescription": {
     "message": "Choose an action on click Yabumi icon next to location bar.",
     "description": "Description for default action option."
-  },
-  "saveOptions": {
-    "message": "Save options",
-    "description": "Button label for save options."
-  },
-  "optionsSaved": {
-    "message": "Options saved",
-    "description": "Message on options saved."
   }
 }

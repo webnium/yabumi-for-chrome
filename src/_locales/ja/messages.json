@@ -26,13 +26,5 @@
   "optionDefaultActionDescription": {
     "message": "ロケーションバーの横にあるアイコンをクリックしたときの動作を選択",
     "description": "Description for default action option."
-  },
-  "saveOptions": {
-    "message": "設定を保存",
-    "description": "Button label for save options."
-  },
-  "optionsSaved": {
-    "message": "設定を保存しました",
-    "description": "Message on options saved."
   }
 }
