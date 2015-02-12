@@ -50,17 +50,17 @@ function doDefaultAction () {
 }
 
 function doCaptureVisibleArea() {
-    getCurrentTab()
-        .then(executeContentScript)
-        .then(captureVisibleArea)
-        .then(uploadToYabumi, onCaptureFailure)
-        .catch(onUploadFailure);
+    doCapture(captureVisibleArea);
 }
 
 function doCaptureEntirePage() {
+    doCapture(captureEntirePage);
+}
+
+function doCapture(capture) {
     getCurrentTab()
         .then(executeContentScript)
-        .then(captureEntirePage)
+        .then(capture)
         .then(uploadToYabumi, onCaptureFailure)
         .catch(onUploadFailure);
 }
