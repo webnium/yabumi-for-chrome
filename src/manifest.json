@@ -2,11 +2,12 @@
   "manifest_version": 2,
   "name": "Yabumi for Chrome",
   "short_name": "Yabumi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "minimum_chrome_version": "35",
   "author": "Webnium Inc",
+  "default_locale": "en",
 
-  "description": "Speedy screen shot sharing application",
+  "description": "__MSG_extDescription__",
   "icons": {
     "16": "img/icon16.png",
     "48": "img/icon48.png",
@@ -18,7 +19,7 @@
       "19": "img/action_icon19.png",
       "38": "img/action_icon38.png"
     },
-    "default_title": "Share screen shot via Yabumi"
+    "default_title": "__MSG_browserActionTitle__"
   },
 
   "background": {

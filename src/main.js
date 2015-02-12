@@ -12,14 +12,14 @@ function createContextMenus() {
     var contextMenus = new ContextMenus();
 
     contextMenus.create({
-        title: 'Capture visible area',
+        title: chrome.i18n.getMessage('captureVisibleArea'),
         id: 'capture-visible-area',
         contexts: ['page', 'browser_action'],
         onclick: doCaptureVisibleArea
     });
 
     contextMenus.create({
-        title: 'Capture entire page',
+        title: chrome.i18n.getMessage('captureEntirePage'),
         id: 'capture-entire-page',
         contexts: ['page', 'browser_action'],
         onclick: doCaptureEntirePage

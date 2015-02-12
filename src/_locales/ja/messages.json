@@ -1,0 +1,18 @@
+{
+  "extDescription": {
+    "message": "Yabumiで すばやいスクリーンショット共有",
+    "description": "Extension description."
+  },
+  "browserActionTitle": {
+    "message": "Yabumiでスクリーンショットを共有",
+    "description": "Tooltip of browser action icon"
+  },
+  "captureVisibleArea": {
+    "message": "見えている範囲をキャプチャ",
+    "description": "Context menu item title for capture visible area."
+  },
+  "captureEntirePage": {
+    "message": "ページ全体をキャプチャ",
+    "description": "Context menu item title for capture entire page."
+  }
+}

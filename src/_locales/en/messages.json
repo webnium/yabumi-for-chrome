@@ -1,0 +1,18 @@
+{
+  "extDescription": {
+    "message": "Speedy screen shot sharing via Yabumi",
+    "description": "Extension description."
+  },
+  "browserActionTitle": {
+    "message": "Share screen shot via Yabumi",
+    "description": "Tooltip of browser action icon"
+  },
+  "captureVisibleArea": {
+    "message": "Capture visible area",
+    "description": "Context menu item title for capture visible area."
+  },
+  "captureEntirePage": {
+    "message": "Capture entire page",
+    "description": "Context menu item title for capture entire page."
+  }
+}
