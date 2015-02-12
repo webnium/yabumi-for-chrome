@@ -35,28 +35,17 @@
                 })
                     .insertTo(container);
 
-                var notify = flagrate.createNotify({
-                    title: 'Yabumi for Chrome',
-                    disableDesktopNotify: true
+                form.element.on('change', function (){
+                    chrome.storage.sync.set(
+                        form.getResult(),
+                        function () {
+                            notify.create({
+                                icon: 'img/icon48.png',
+                                text: chrome.i18n.getMessage('optionsSaved')
+                            });
+                        }
+                    );
                 });
-                var saveButton = flagrate.createButton({
-                    color: '@blue',
-                    label: chrome.i18n.getMessage('saveOptions'),
-                    id: 'saveOptionsButton',
-                    onSelect: function () {
-                        saveButton.disable();
-                        chrome.storage.sync.set(
-                            form.getResult(),
-                            function () {
-                                notify.create({
-                                    icon: 'img/icon48.png',
-                                    text: chrome.i18n.getMessage('optionsSaved')
-                                });
-                                saveButton.enable();
-                            }
-                        );
-                    }
-                }).insertTo(container);
             });
     }
 
