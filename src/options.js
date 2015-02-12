@@ -12,9 +12,7 @@
             .insertTo(document.body);
 
         chrome.storage.sync.get(
-            {
-                defaultAction: 'captureVisibleArea'
-            },
+            defaultOptions,
             function (options) {
                 var form = flagrate.createForm({
                     fields: [

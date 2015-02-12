@@ -5,7 +5,7 @@
  * Licensed under the MIT-License.
 **/
 
-chrome.browserAction.onClicked.addListener(doCaptureVisibleArea);
+chrome.browserAction.onClicked.addListener(doDefaultAction);
 chrome.runtime.onInstalled.addListener(createContextMenus);
 
 function createContextMenus() {
@@ -23,6 +23,19 @@ function createContextMenus() {
         id: 'capture-entire-page',
         contexts: ['page', 'browser_action'],
         onclick: doCaptureEntirePage
+    });
+}
+
+function doDefaultAction () {
+    chrome.storage.sync.get(defaultOptions, function (options) {
+        switch (options.defaultAction) {
+            case 'captureEntirePage':
+                doCaptureEntirePage();
+                break;
+            case 'captureVisibleArea':
+            default:
+                doCaptureVisibleArea();
+        }
     });
 }
 

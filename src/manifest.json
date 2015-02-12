@@ -23,7 +23,7 @@
   },
 
   "background": {
-    "scripts": ["context-menus.js", "manipulate-tab.js", "main.js"],
+    "scripts": ["context-menus.js", "manipulate-tab.js", "defaultOptions.js", "main.js"],
     "persistent": false
   },
 
