@@ -1,8 +1,8 @@
 # Yabumi chrome extension
 A speedy screen shot sharing application powered by [Yabumi](https://yabumi.cc).
 
-## Status
-This product is still under construct :p
+## Install
+Visit [Chrome Web Store](https://chrome.google.com/webstore/detail/yabumi-for-chrome/pkipobhcddgffnenhohcafaaekfndmcf)
 
 ## License
 MIT License
