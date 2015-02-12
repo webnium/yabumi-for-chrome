@@ -6,26 +6,21 @@
 **/
 
 chrome.browserAction.onClicked.addListener(doDefaultAction);
-chrome.runtime.onInstalled.addListener(createContextMenus);
+chrome.runtime.onInstalled.addListener(ContextMenus.create);
 
-var contextMenus;
-function createContextMenus() {
-    contextMenus = new ContextMenus();
-
-    contextMenus.create({
+ContextMenus.setItems([
+    {
         title: chrome.i18n.getMessage('captureVisibleArea'),
         id: 'capture-visible-area',
         contexts: ['page', 'browser_action'],
         onclick: doCaptureVisibleArea
-    });
-
-    contextMenus.create({
+    },
+    {
         title: chrome.i18n.getMessage('captureEntirePage'),
         id: 'capture-entire-page',
         contexts: ['page', 'browser_action'],
         onclick: doCaptureEntirePage
-    });
-}
+    }]);
 
 function doDefaultAction () {
     chrome.storage.sync.get(defaultOptions, function (options) {
