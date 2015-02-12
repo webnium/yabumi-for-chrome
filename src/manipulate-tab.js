@@ -16,9 +16,12 @@ function getCurrentTab() {
 }
 
 function executeContentScript(tab) {
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
         chrome.tabs.executeScript(tab.id, {file: 'content.js'}, function () {
-            resolve(tab)
+            if (chrome.runtime.lastError)
+                reject(chrome.runtime.lastError);
+            else
+                resolve(tab);
         });
     });
 }
