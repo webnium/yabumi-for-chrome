@@ -15,6 +15,10 @@
     "message": "Capture entire page",
     "description": "Context menu item title for capture entire page."
   },
+  "history": {
+    "message": "History",
+    "description": "Context menu item for history page"
+  },
   "yabumiForChromeOptions": {
     "message": "Yabumi for Chrome Options",
     "description": "Title for option page."

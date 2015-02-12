@@ -12,15 +12,29 @@ ContextMenus.setItems([
     {
         title: chrome.i18n.getMessage('captureVisibleArea'),
         id: 'capture-visible-area',
-        contexts: ['page', 'browser_action'],
+        contexts: ['page', 'image', 'browser_action'],
         onclick: doCaptureVisibleArea
     },
     {
         title: chrome.i18n.getMessage('captureEntirePage'),
         id: 'capture-entire-page',
-        contexts: ['page', 'browser_action'],
+        contexts: ['page', 'image', 'browser_action'],
         onclick: doCaptureEntirePage
-    }]);
+    },
+    {
+        type: 'separator',
+        id: 'separator',
+        contexts: ['page', 'image', 'browser_action']
+    },
+    {
+        title: chrome.i18n.getMessage('history'),
+        id: 'history',
+        contexts: ['page', 'image', 'browser_action'],
+        onclick: function () {
+            chrome.tabs.create({url: 'https://yabumi.cc/me.html'});
+        }
+    }
+]);
 
 function doDefaultAction () {
     chrome.storage.sync.get(defaultOptions, function (options) {
