@@ -6,6 +6,37 @@
 **/
 
 chrome.browserAction.onClicked.addListener(doCaptureVisibleArea);
+chrome.runtime.onInstalled.addListener(createContextMenus);
+
+var ContextMenus = function () {
+    var items = this.items = {};
+
+    chrome.contextMenus.onClicked.addListener(function (info, tab) {
+        items[info.menuItemId].onclick(info, tab);
+    });
+};
+
+ContextMenus.prototype = {
+    create: function (properties) {
+        this.items[properties.id] = {
+            onclick: properties.onclick
+        };
+
+        properties.onclick = null;
+        chrome.contextMenus.create(properties);
+    }
+};
+
+function createContextMenus() {
+    var contextMenus = new ContextMenus();
+
+    contextMenus.create({
+        title: 'Capture visible area',
+        id: 'capture-visible-area',
+        contexts: ['page', 'browser_action'],
+        onclick: doCaptureVisibleArea
+    });
+}
 
 function doCaptureVisibleArea() {
     getCurrentTab()
