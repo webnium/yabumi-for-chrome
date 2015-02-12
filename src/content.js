@@ -16,6 +16,25 @@
                     width: document.documentElement.clientWidth,
                     height: document.documentElement.clientHeight
                 });
+            },
+            measurePage: function (callback) {
+                callback({
+                    width: document.documentElement.scrollWidth,
+                    height: document.documentElement.scrollHeight
+                });
+            },
+            getScrollPosition: function (callback) {
+                callback({
+                    top: window.scrollY,
+                    left: window.scrollX
+                });
+            },
+            scroll: function (callback, left, top) {
+                var needsLongWait = Math.abs(window.scrollY - top) > document.documentElement.clientHeight * 3;
+                window.scroll(left, top);
+
+                setTimeout(callback, needsLongWait ? 100 : 20);
+                return true;
             }
         }
     };
@@ -23,6 +42,6 @@
     chrome.runtime.onMessage.addListener(function (message, sender, callback) {
         var args = message.args || [];
         args.unshift(callback);
-        window.yabumiForChrome.f[message.name].apply(null, args);
+        return window.yabumiForChrome.f[message.name].apply(null, args);
     });
 })();

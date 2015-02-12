@@ -36,12 +36,29 @@ function createContextMenus() {
         contexts: ['page', 'browser_action'],
         onclick: doCaptureVisibleArea
     });
+
+    contextMenus.create({
+        title: 'Capture entire page',
+        id: 'capture-entire-page',
+        contexts: ['page', 'browser_action'],
+        onclick: doCaptureEntirePage
+    });
 }
 
 function doCaptureVisibleArea() {
     getCurrentTab()
         .then(executeContentScript)
         .then(captureVisibleArea)
+        .then(uploadToYabumi)
+        .catch(function (e) {
+            console.log(e);
+        });
+}
+
+function doCaptureEntirePage() {
+    getCurrentTab()
+        .then(executeContentScript)
+        .then(captureEntirePage)
         .then(uploadToYabumi)
         .catch(function (e) {
             console.log(e);
@@ -61,13 +78,40 @@ function getCurrentTab() {
 
 function executeContentScript(tab) {
     return new Promise(function (resolve) {
-        chrome.tabs.executeScript(tab.id, {file: 'content.js'}, function () {resolve(tab)});
+        chrome.tabs.executeScript(tab.id, {file: 'content.js'}, function () {
+            resolve(tab)
+        });
     });
 }
+
+// tab manipulation
 function measureScreen(targetTab) {
     return new Promise(function (resolve, reject) {
         chrome.tabs.sendMessage(targetTab.id, {name: 'measureScreen'},
             function (screen) { if (screen) resolve(screen); reject(new Error('Cannot measure screen.'))});
+    });
+}
+
+function measurePage(targetTab) {
+    return new Promise(function (resolve, reject) {
+        chrome.tabs.sendMessage(targetTab.id, {name: 'measurePage'},
+            function (page) { if (page) resolve(page); reject(new Error('Cannot measure page.'))});
+    });
+}
+
+function getScrollPosition(targetTab) {
+    return new Promise(function (resolve, reject) {
+        chrome.tabs.sendMessage(targetTab.id, {name: 'getScrollPosition'},
+            function (position) { if (position) resolve(position); reject(new Error('Cannot scroll position.'))});
+    });
+}
+
+function scrollTab(tab, left, top) {
+    return new Promise(function (resolve) {
+        chrome.tabs.sendMessage(tab.id, {name: 'scroll', args: [left, top]},
+            function () {
+                resolve();
+            });
     });
 }
 
@@ -80,6 +124,53 @@ function captureVisibleArea(tab) {
         })
         .then(captureVisibleTab)
         .then(function (dataUri) { return drawToCanvasContext(canvasContext, 0, 0, dataUri);})
+        .then(function () {
+            return Promise.resolve(canvasContext.canvas.toDataURL('image/png'));
+        });
+}
+
+function captureEntirePage(tab) {
+    var canvasContext;
+    return Promise.all([measureScreen(tab), measurePage(tab), getScrollPosition(tab)])
+        .then(function (values) {
+            var top = 0;
+            var left = 0;
+            var screen = values[0];
+            var page = values[1];
+            var scroll = values[2];
+
+            canvasContext = createCanvasContext(page.width, page.height);
+
+            function _forward() {
+                if (left + screen.width >= page.width) {
+                    left = 0;
+                    top = Math.min(top + screen.height, page.height - screen.height);
+                } else {
+                    left = Math.min(left + screen.width, page.width - screen.width);
+                }
+            }
+
+            function _hasNext() {
+                return top + screen.height < page.height || left + screen.width < page.width;
+            }
+
+            return new Promise(function (resolve, reject) {
+                (function _loop() {
+                    scrollTab(tab, left, top)
+                        .then(captureVisibleTab)
+                        .then(function (dataUri) { return drawToCanvasContext(canvasContext, left, top, dataUri);})
+                        .then(function () {
+                            if (_hasNext()) {
+                                _forward();
+                                _loop();
+                            } else {
+                                resolve();
+                            }
+                        }, reject);
+                })();
+            })
+                .then(scrollTab.bind(null, tab, scroll.left, scroll.top));
+        })
         .then(function () {
             return Promise.resolve(canvasContext.canvas.toDataURL('image/png'));
         });
@@ -167,3 +258,4 @@ function saveToClipboard(string) {
 
     document.body.removeChild(textArea);
 }
+
