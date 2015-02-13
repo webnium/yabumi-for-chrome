@@ -70,7 +70,7 @@ function onCaptureFailure(e) {
         type: 'basic',
         title: 'Yabumi for Chrome',
         message: chrome.i18n.getMessage('captureFailed'),
-        contextMessage: chrome.i18n.getMessage('captureFailedContextMessage'),
+        contextMessage: typeof e === 'string' ? e :chrome.i18n.getMessage('captureFailedContextMessage'),
         iconUrl: 'img/icon128.png'
     }, function () {});
     console.log(e);
@@ -109,6 +109,10 @@ function captureEntirePage(tab) {
             var screen = values[0];
             var page = values[1];
             var scroll = values[2];
+
+            if (page.width > 32767 || page.height > 32767 || page.width * page.height > 268435456) {
+                return Promise.reject(chrome.i18n.getMessage('pageSizeTooLarge'));
+            }
 
             canvasContext = createCanvasContext(page.width, page.height);
 
