@@ -110,6 +110,10 @@ function captureEntirePage(tab) {
             var page = values[1];
             var scroll = values[2];
 
+            if (page.width * page.height === 0) {
+                return Promise.reject({'message': 'blank page or something'});
+            }
+
             if (page.width > 32767 || page.height > 32767 || page.width * page.height > 268435456) {
                 return Promise.reject(chrome.i18n.getMessage('pageSizeTooLarge'));
             }
