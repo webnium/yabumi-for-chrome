@@ -96,7 +96,7 @@ function captureVisibleArea(tab) {
         .then(captureVisibleTab)
         .then(function (dataUri) { return drawToCanvasContext(canvasContext, 0, 0, dataUri);})
         .then(function () {
-            return Promise.resolve(canvasContext.canvas.toDataURL('image/png'));
+            return Promise.resolve({dataUrl: canvasContext.canvas.toDataURL('image/png'), title: tab.title});
         });
 }
 
@@ -151,7 +151,7 @@ function captureEntirePage(tab) {
                 .then(scrollTab.bind(null, tab, scroll.left, scroll.top));
         })
         .then(function () {
-            return Promise.resolve(canvasContext.canvas.toDataURL('image/png'));
+            return Promise.resolve({dataUrl: canvasContext.canvas.toDataURL('image/png'), title: tab.title});
         });
 }
 
@@ -161,7 +161,7 @@ function captureVisibleTab() {
     });
 }
 
-function uploadToYabumi(dataUrl) {
+function uploadToYabumi(image) {
     var xhr = new XMLHttpRequest();
     xhr.open('post', 'https://yabumi.cc/api/images.json', true);
 
@@ -183,8 +183,9 @@ function uploadToYabumi(dataUrl) {
 
     chrome.storage.sync.get(defaultOptions, function (options) {
         var formData = new window.FormData();
-        formData.append('imagedata', dataURItoBlob(dataUrl), 'screen shot');
+        formData.append('imagedata', dataURItoBlob(image.dataUrl));
         formData.append('expiresAt', options.defaultDuration ? new Date(Date.now() + options.defaultDuration).toISOString() : null);
+        formData.append('name', 'screen shot: ' + image.title);
 
         xhr.send(formData);
     });
