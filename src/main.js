@@ -164,6 +164,11 @@ function captureVisibleTab() {
 function uploadToYabumi(image) {
     var xhr = new XMLHttpRequest();
     xhr.open('post', 'https://yabumi.cc/api/images.json', true);
+    xhr.setRequestHeader('X-Yabumi-Client',
+        'YabumiForChrome/' + chrome.runtime.getManifest().version + ' '
+        + window.navigator.userAgent.match(/Mozilla\/5.0 (\([^)]+\))/)[1] + ' '
+        + window.navigator.userAgent.match( /Chrome\/[^ ]+/)[0]
+    );
 
     var promise = new Promise(function (resolve, reject) {
         xhr.addEventListener('load', function () {
