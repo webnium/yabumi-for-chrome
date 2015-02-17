@@ -7,16 +7,18 @@
 (function (){
     function init() {
         document.querySelector('title').textContent = chrome.i18n.getMessage('yabumiForChromeOptions');
-        flagrate.createElement('h1')
-            .update(chrome.i18n.getMessage('yabumiForChromeOptions'))
-            .insertTo(document.body);
-
         var container = flagrate.createElement('div', {id: 'container'})
             .insertTo(document.body);
+        flagrate.createElement('h1')
+            .setStyle({color: '#888', marginLeft: '10px'})
+            .update(chrome.i18n.getMessage('yabumiForChromeOptions'))
+            .insertTo(container);
+
         chrome.storage.sync.get(
             defaultOptions,
             function (options) {
                 var form = flagrate.createForm({
+                    vertical: true,
                     fields: [
                         {
                             key: 'defaultAction',

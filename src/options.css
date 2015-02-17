@@ -12,6 +12,16 @@ body {
     float: right;
 }
 
+#container > h1 {
+    color: #888;
+    font-weight: normal;
+    margin-left: 10px;
+}
+
 #saveOptionsButton {
     margin-top: 20px;
+}
+
+form.flagrate.flagrate-form.flagrate-form-vertical > div:not(:last-child) {
+    margin-bottom: 20px;
 }
