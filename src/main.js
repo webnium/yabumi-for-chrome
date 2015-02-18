@@ -91,7 +91,7 @@ function captureVisibleArea(tab) {
 
     return measureScreen(tab)
         .then(function (screen) {
-            canvasContext = createCanvasContext(screen.width, screen.height);
+            canvasContext = createCanvasContext(screen.width * screen.pixelRatio, screen.height, screen.pixelRatio);
         })
         .then(captureVisibleTab)
         .then(function (dataUri) { return drawToCanvasContext(canvasContext, 0, 0, dataUri);})
@@ -114,11 +114,11 @@ function captureEntirePage(tab) {
                 return Promise.reject({'message': 'blank page or something'});
             }
 
-            if (page.width > 32767 || page.height > 32767 || page.width * page.height > 268435456) {
+            if (page.width * page.pixelRatio > 32767 || page.height * page.pixelRatio > 32767 || page.width * page.height * page.pixelRatio * page.pixelRatio> 268435456) {
                 return Promise.reject(chrome.i18n.getMessage('pageSizeTooLarge'));
             }
 
-            canvasContext = createCanvasContext(page.width, page.height);
+            canvasContext = createCanvasContext(page.width * page.pixelRatio, page.height * page.pixelRatio);
 
             function _forward() {
                 if (left + screen.width >= page.width) {
@@ -137,7 +137,7 @@ function captureEntirePage(tab) {
                 (function _loop() {
                     scrollTab(tab, left, top)
                         .then(captureVisibleTab)
-                        .then(drawToCanvasContext.bind(null, canvasContext, left, top))
+                        .then(drawToCanvasContext.bind(null, canvasContext, left * page.pixelRatio, top * page.pixelRatio))
                         .then(function () {
                             if (_hasNext()) {
                                 _forward();

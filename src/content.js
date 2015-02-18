@@ -14,13 +14,15 @@
             measureScreen: function (callback) {
                 callback({
                     width: document.documentElement.clientWidth,
-                    height: document.documentElement.clientHeight
+                    height: document.documentElement.clientHeight,
+                    pixelRatio: window.devicePixelRatio
                 });
             },
             measurePage: function (callback) {
                 callback({
                     width: document.documentElement.scrollWidth,
-                    height: document.documentElement.scrollHeight
+                    height: document.documentElement.scrollHeight,
+                    pixelRatio: window.devicePixelRatio
                 });
             },
             getScrollPosition: function (callback) {
