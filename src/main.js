@@ -91,7 +91,7 @@ function captureVisibleArea(tab) {
 
     return measureScreen(tab)
         .then(function (screen) {
-            canvasContext = createCanvasContext(screen.width * screen.pixelRatio, screen.height, screen.pixelRatio);
+            canvasContext = createCanvasContext(screen.width * screen.pixelRatio, screen.height * screen.pixelRatio);
         })
         .then(captureVisibleTab)
         .then(function (dataUri) { return drawToCanvasContext(canvasContext, 0, 0, dataUri);})
