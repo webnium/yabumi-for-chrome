@@ -22,6 +22,12 @@ ContextMenus.setItems([
         onclick: doCaptureEntirePage
     },
     {
+        title: chrome.i18n.getMessage('uploadThisImage'),
+        id: 'upload-this-image',
+        contexts: ['image'],
+        onclick: doUploadClickedImage
+    },
+    {
         type: 'separator',
         id: 'separator',
         contexts: ['page', 'image', 'browser_action']
@@ -65,6 +71,12 @@ function doCapture(capture) {
         .catch(onUploadFailure);
 }
 
+function doUploadClickedImage(info) {
+    loadImage(info.srcUrl)
+        .then(uploadToYabumi, onCaptureFailure)
+        .catch(onUploadFailure);
+}
+
 function onCaptureFailure(e) {
     chrome.notifications.create('', {
         type: 'basic',
@@ -96,7 +108,7 @@ function captureVisibleArea(tab) {
         .then(captureVisibleTab)
         .then(function (dataUri) { return drawToCanvasContext(canvasContext, 0, 0, dataUri);})
         .then(function () {
-            return Promise.resolve({dataUrl: canvasContext.canvas.toDataURL('image/png'), title: tab.title});
+            return Promise.resolve({blob: dataURItoBlob(canvasContext.canvas.toDataURL('image/png')), title: 'screen shot: ' + tab.title});
         });
 }
 
@@ -151,7 +163,7 @@ function captureEntirePage(tab) {
                 .then(scrollTab.bind(null, tab, scroll.left, scroll.top));
         })
         .then(function () {
-            return Promise.resolve({dataUrl: canvasContext.canvas.toDataURL('image/png'), title: tab.title});
+            return Promise.resolve({blob: dataURItoBlob(canvasContext.canvas.toDataURL('image/png')), title: 'screen shot: ' + tab.title});
         });
 }
 
@@ -159,6 +171,24 @@ function captureVisibleTab() {
     return new Promise(function (resolve) {
         chrome.tabs.captureVisibleTab(null, {format: 'png'}, function (dataUri) {resolve(dataUri)});
     });
+}
+
+function loadImage(url) {
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', url);
+    xhr.responseType = 'blob';
+    var promise = new Promise(function (resolve, reject) {xhr.addEventListener('load', function () {
+        if (xhr.status !== 200) {
+            reject();
+        }
+
+        resolve({blob: xhr.response, title: 'copy of: ' + url})
+    })});
+
+    xhr.send();
+
+    return promise;
 }
 
 function uploadToYabumi(image) {
@@ -188,9 +218,9 @@ function uploadToYabumi(image) {
 
     chrome.storage.sync.get(defaultOptions, function (options) {
         var formData = new window.FormData();
-        formData.append('imagedata', dataURItoBlob(image.dataUrl));
+        formData.append('imagedata', image.blob);
         formData.append('expiresAt', options.defaultDuration ? new Date(Date.now() + options.defaultDuration).toISOString() : null);
-        formData.append('name', 'screen shot: ' + image.title);
+        formData.append('name', image.title);
 
         xhr.send(formData);
     });

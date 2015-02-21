@@ -15,6 +15,10 @@
     "message": "ページ全体をキャプチャ",
     "description": "Context menu item title for capture entire page."
   },
+  "uploadThisImage": {
+    "message": "この画像をアップロード",
+    "description": "Context menu item title for upload this image."
+  },
   "history": {
     "message": "履歴",
     "description": "Context menu item for history page"
