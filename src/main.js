@@ -71,8 +71,8 @@ function doCapture(capture) {
         .catch(onUploadFailure);
 }
 
-function doUploadClickedImage(info) {
-    loadImage(info.srcUrl)
+function doUploadClickedImage(info, tab) {
+    loadImage(info.srcUrl, tab)
         .then(uploadToYabumi, onCaptureFailure)
         .catch(onUploadFailure);
 }
@@ -173,7 +173,11 @@ function captureVisibleTab() {
     });
 }
 
-function loadImage(url) {
+function loadImage(url, tab) {
+
+    if (/^data:/.test(url)) {
+        return Promise.resolve({blob: dataURItoBlob(url), title: 'copy from: ' + tab.title});
+    }
 
     var xhr = new XMLHttpRequest();
     xhr.open('get', url);
