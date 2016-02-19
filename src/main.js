@@ -70,7 +70,7 @@ function doCaptureEntirePage() {
 }
 
 function doCaptureSelectedArea() {
-
+    doCapture(captureSelectedArea);
 }
 
 function doCapture(capture) {
@@ -88,6 +88,10 @@ function doUploadClickedImage(info, tab) {
 }
 
 function onCaptureFailure(e) {
+    if (e === 'canceled') {
+        return;
+    }
+
     chrome.notifications.create('', {
         type: 'basic',
         title: 'Yabumi for Chrome',
@@ -120,6 +124,23 @@ function captureVisibleArea(tab) {
         .then(function () {
             return Promise.resolve({blob: dataURItoBlob(canvasContext.canvas.toDataURL('image/png')), title: 'screen shot: ' + tab.title});
         });
+}
+
+function captureSelectedArea(tab) {
+    var canvasContext;
+    var selectedArea;
+
+    return enforceSelectArea(tab)
+        .then(function (area) {
+            canvasContext = createCanvasContext(area.width * area.pixelRatio, area.height * area.pixelRatio);
+            selectedArea = area;
+        })
+        .then(captureVisibleTab)
+        .then(function (dataUri) { return drawToCanvasContext(canvasContext, -selectedArea.left * selectedArea.pixelRatio, -selectedArea.top * selectedArea.pixelRatio, dataUri);})
+        .then(function () {
+            return Promise.resolve({blob: dataURItoBlob(canvasContext.canvas.toDataURL('image/png')), title: 'screen shot: ' + tab.title});
+        });
+
 }
 
 function captureEntirePage(tab) {

@@ -56,3 +56,16 @@ function scrollTab(tab, left, top) {
             });
     });
 }
+
+function enforceSelectArea(tab) {
+    return new Promise(function (resolve, reject) {
+        chrome.tabs.sendMessage(tab.id, {name: 'enforceSelectArea'},
+            function (area) {
+                if (!area) {
+                    reject('canceled');
+                    return;
+                }
+                resolve(area);
+            });
+    });
+}
