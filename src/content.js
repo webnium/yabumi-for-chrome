@@ -55,6 +55,7 @@
 
     function getSelectedArea() {
         return new Promise(function (resolve, reject) {
+            var originalUserSelect = document.body.style.webkitUserSelect;
             var mask = document.createElement('div');
             mask.style.zIndex = 100000;
             mask.style.position = 'absolute';
@@ -62,12 +63,12 @@
             mask.style.left = 0;
             mask.style.width = document.documentElement.scrollWidth + 'px';
             mask.style.height = document.documentElement.scrollHeight + 'px';
-            mask.style.backgroundColor = 'rbga(0, 0, 0, 0)';
+            mask.style.backgroundColor = 'rgba(0, 0, 0, 0.01)';
             mask.style.cursor = 'crosshair';
 
             var selectedArea = document.createElement('div');
             selectedArea.style.position = 'relative';
-            selectedArea.backgroundColor = 'rbga(0, 0, 0, 0.3)';
+            selectedArea.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
             selectedArea.style.visibility = 'hidden';
             mask.appendChild(selectedArea);
 
@@ -80,10 +81,14 @@
 
                 mask.addEventListener('mousemove', resizeSelectedArea);
                 window.addEventListener('mouseup', fixSelectedArea);
-                origin = {
-                    x: event.clientX,
-                    y: event.clientY
-                };
+                document.body.style.webkitUserSelect = 'none';
+                origin = mouseEventToPoint(event);
+
+                selectedArea.style.visibility = 'visible';
+                selectedArea.style.top = origin.y + 'px';
+                selectedArea.style.left = origin.x + 'px';
+                selectedArea.style.width = 0;
+                selectedArea.style.height = 0;
             });
 
 
@@ -93,6 +98,7 @@
                 }
 
                 window.removeEventListener('mouseup', fixSelectedArea);
+                document.body.style.webkitUserSelect = originalUserSelect;
                 document.body.removeChild(mask);
 
                 if (!origin) {
@@ -100,28 +106,51 @@
                     return;
                 }
 
-                resolve({
-                    top: Math.min(origin.y, event.clientY),
-                    left: Math.min(origin.x, event.clientX),
-                    width: Math.abs(event.clientX - origin.x),
-                    height: Math.abs(event.clientY - origin.y),
-                    pixelRatio: window.devicePixelRatio
-                });
+                var rect = pointsToRect(origin, mouseEventToPoint(event));
+
+                if (rect.height * rect.width < 200) {
+                    reject();
+                    return;
+                }
+
+                console.log(rect);
+                rect.pixelRatio = window.devicePixelRatio;
+                setTimeout(function () {resolve(rect);}, 100);
             }
 
             function resizeSelectedArea(event) {
-                event.preventDefault();
-                console.log(event);
+                var rect = pointsToRect(origin, mouseEventToPoint(event));
+                selectedArea.style.top = rect.top + 'px';
+                selectedArea.style.left = rect.left + 'px';
+                selectedArea.style.width = rect.width + 'px';
+                selectedArea.style.height =rect.height + 'px';
             }
 
             mask.addEventListener('contextmenu', function (event) {
                 window.removeEventListener('mouseup', fixSelectedArea);
                 document.body.removeChild(mask);
+                document.body.style.webkitUserSelect = originalUserSelect;
                 event.preventDefault();
                 reject();
             });
 
             document.body.appendChild(mask);
         });
+    }
+
+    function mouseEventToPoint(event) {
+        return {
+            x: event.clientX + window.scrollX,
+            y: event.clientY + window.scrollY
+        };
+    }
+
+    function pointsToRect(p1, p2) {
+        return {
+            top: Math.min(p1.y, p2.y),
+            left: Math.min(p1.x, p2.x),
+            width: Math.abs(p2.x - p1.x),
+            height: Math.abs(p2.y - p1.y)
+        }
     }
 })();
