@@ -29,7 +29,8 @@
                                 val: options.defaultAction,
                                 items: [
                                     {label: chrome.i18n.getMessage('captureVisibleArea'), value: 'captureVisibleArea'},
-                                    {label: chrome.i18n.getMessage('captureEntirePage'), value: 'captureEntirePage'}
+                                    {label: chrome.i18n.getMessage('captureEntirePage'), value: 'captureEntirePage'},
+                                    {label: chrome.i18n.getMessage('captureSelectedArea'), value: 'captureSelectedArea'}
                                 ]
                             }
                         },

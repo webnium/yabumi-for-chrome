@@ -22,6 +22,12 @@ ContextMenus.setItems([
         onclick: doCaptureEntirePage
     },
     {
+        title: chrome.i18n.getMessage('captureSelectedArea'),
+        id: 'capture-selected-area',
+        contexts: ['page', 'image', 'browser_action'],
+        onclick: doCaptureSelectedArea
+    },
+    {
         title: chrome.i18n.getMessage('uploadThisImage'),
         id: 'upload-this-image',
         contexts: ['image'],
@@ -61,6 +67,10 @@ function doCaptureVisibleArea() {
 
 function doCaptureEntirePage() {
     doCapture(captureEntirePage);
+}
+
+function doCaptureSelectedArea() {
+
 }
 
 function doCapture(capture) {

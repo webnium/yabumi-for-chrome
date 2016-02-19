@@ -15,6 +15,10 @@
     "message": "ページ全体をキャプチャ",
     "description": "Context menu item title for capture entire page."
   },
+  "captureSelectedArea": {
+    "message": "範囲を選択してキャプチャ",
+    "description": "Context menu item title for capture selected area."
+  },
   "uploadThisImage": {
     "message": "この画像をアップロード",
     "description": "Context menu item title for upload this image."
