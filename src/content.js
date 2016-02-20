@@ -54,6 +54,10 @@
     });
 
     function getSelectedArea() {
+        if (document.getElementById('yabumi-for-chrome-selected-area-capturing-mask')) {
+            return Promise.reject();
+        }
+
         return new Promise(function (resolve, reject) {
             var originalUserSelect = document.body.style.webkitUserSelect;
             var mask = document.createElement('div');
@@ -63,8 +67,9 @@
             mask.style.left = 0;
             mask.style.width = document.documentElement.scrollWidth + 'px';
             mask.style.height = document.documentElement.scrollHeight + 'px';
-            mask.style.backgroundColor = 'rgba(0, 0, 0, 0.01)';
+            mask.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
             mask.style.cursor = 'crosshair';
+            mask.id = 'yabumi-for-chrome-selected-area-capturing-mask';
 
             var selectedArea = document.createElement('div');
             selectedArea.style.position = 'relative';
