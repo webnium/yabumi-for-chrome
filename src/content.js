@@ -38,7 +38,7 @@
                 });
             },
             scroll: function (callback, left, top) {
-                var needsLongWait = Math.abs(window.scrollY - top) > document.documentElement.clientHeight * 3;
+                var needsLongWait = Math.abs(window.scrollY - top) > document.documentElement.clientHeight * window.devicePixelRatio * 2.5;
                 window.scroll(left, top);
 
                 setTimeout(callback, needsLongWait ? 100 : 20);
@@ -118,7 +118,6 @@
                     return;
                 }
 
-                console.log(rect);
                 rect.pixelRatio = window.devicePixelRatio;
                 setTimeout(function () {resolve(rect);}, 200);
             }
