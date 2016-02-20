@@ -84,7 +84,7 @@
                     return;
                 }
 
-                mask.addEventListener('mousemove', resizeSelectedArea);
+                window.addEventListener('mousemove', resizeSelectedArea);
                 window.addEventListener('mouseup', fixSelectedArea);
                 document.body.style.webkitUserSelect = 'none';
                 origin = mouseEventToPoint(event);
@@ -96,15 +96,15 @@
                 selectedArea.style.height = 0;
             });
 
+            document.body.appendChild(mask);
+            window.addEventListener('contextmenu', cancel);
 
             function fixSelectedArea (event) {
                 if (event.button !== 0) {
                     return;
                 }
 
-                window.removeEventListener('mouseup', fixSelectedArea);
-                document.body.style.webkitUserSelect = originalUserSelect;
-                document.body.removeChild(mask);
+                destruct();
 
                 if (!origin) {
                     reject();
@@ -130,22 +130,27 @@
                 selectedArea.style.height =rect.height + 'px';
             }
 
-            mask.addEventListener('contextmenu', function (event) {
+            function cancel(event) {
+                destruct();
+                reject();
+                event.preventDefault();
+            }
+
+            function destruct() {
+                window.removeEventListener('mousemove', resizeSelectedArea);
                 window.removeEventListener('mouseup', fixSelectedArea);
+                window.removeEventListener('contextmenu', cancel);
                 document.body.removeChild(mask);
                 document.body.style.webkitUserSelect = originalUserSelect;
-                event.preventDefault();
-                reject();
-            });
+            }
 
-            document.body.appendChild(mask);
         });
     }
 
     function mouseEventToPoint(event) {
         return {
-            x: event.clientX + window.scrollX,
-            y: event.clientY + window.scrollY
+            x: Math.min(event.clientX, document.documentElement.clientWidth) + window.scrollX,
+            y: Math.min(event.clientY, document.documentElement.clientHeight) + window.scrollY
         };
     }
 
