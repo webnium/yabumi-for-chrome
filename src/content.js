@@ -61,7 +61,7 @@
         return new Promise(function (resolve, reject) {
             var originalUserSelect = document.body.style.webkitUserSelect;
             var mask = document.createElement('div');
-            mask.style.zIndex = 100000;
+            mask.style.zIndex = 2147483647; // maximum value
             mask.style.position = 'absolute';
             mask.style.top = 0;
             mask.style.left = 0;
