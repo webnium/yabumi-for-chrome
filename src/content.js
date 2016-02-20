@@ -115,7 +115,7 @@
 
                 console.log(rect);
                 rect.pixelRatio = window.devicePixelRatio;
-                setTimeout(function () {resolve(rect);}, 100);
+                setTimeout(function () {resolve(rect);}, 200);
             }
 
             function resizeSelectedArea(event) {

@@ -131,12 +131,53 @@ function captureSelectedArea(tab) {
     var selectedArea;
 
     return enforceSelectArea(tab)
-        .then(function (area) {
-            canvasContext = createCanvasContext(area.width * area.pixelRatio, area.height * area.pixelRatio);
+        .then(area => {
             selectedArea = area;
         })
-        .then(captureVisibleTab)
-        .then(function (dataUri) { return drawToCanvasContext(canvasContext, -selectedArea.left * selectedArea.pixelRatio, -selectedArea.top * selectedArea.pixelRatio, dataUri);})
+        .then(() => { return Promise.all([measureScreen(tab), getScrollPosition(tab)]); } )
+        .then(values => {
+            var screen = values[0];
+            var scroll = values[1];
+            var top = Math.min(selectedArea.top, scroll.top);
+            var left = Math.min(selectedArea.left, scroll.left);
+            if (selectedArea.width * selectedArea.pixelRatio > 32767 || selectedArea.height * selectedArea.pixelRatio > 32767 || selectedArea.width * selectedArea.height * selectedArea.pixelRatio * selectedArea.pixelRatio> 268435456) {
+                return Promise.reject(chrome.i18n.getMessage('areaSizeTooLarge'));
+            }
+
+            canvasContext = createCanvasContext(selectedArea.width * selectedArea.pixelRatio, selectedArea.height * selectedArea.pixelRatio);
+
+            selectedArea.right = selectedArea.left + selectedArea.width;
+            selectedArea.bottom = selectedArea.top + selectedArea.height;
+            function _forward() {
+                if (left + screen.width >= selectedArea.right) {
+                    left = Math.min(selectedArea.left, scroll.left);
+                    top = Math.min(top + screen.height, selectedArea.bottom - screen.height);
+                } else {
+                    left = Math.min(left + screen.width, selectedArea.right - screen.width);
+                }
+            }
+
+            function _hasNext() {
+                return top + screen.height < selectedArea.bottom || left + screen.width < selectedArea.right;
+            }
+
+            return new Promise(function (resolve, reject) {
+                (function _loop() {
+                    scrollTab(tab, left, top)
+                        .then(captureVisibleTab)
+                        .then(drawToCanvasContext.bind(null, canvasContext, (left - selectedArea.left) * selectedArea.pixelRatio, (top - selectedArea.top) * selectedArea.pixelRatio))
+                        .then(function () {
+                            if (_hasNext()) {
+                                _forward();
+                                _loop();
+                            } else {
+                                resolve();
+                            }
+                        }, reject);
+                })();
+            })
+                .then(scrollTab.bind(null, tab, scroll.left, scroll.top));
+        })
         .then(function () {
             return Promise.resolve({blob: dataURItoBlob(canvasContext.canvas.toDataURL('image/png')), title: 'screen shot: ' + tab.title});
         });
