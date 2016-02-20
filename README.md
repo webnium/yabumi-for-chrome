@@ -5,7 +5,7 @@ A speedy screen shot sharing application powered by [Yabumi](https://yabumi.cc).
 Visit [Chrome Web Store](https://chrome.google.com/webstore/detail/yabumi-for-chrome/pkipobhcddgffnenhohcafaaekfndmcf)
 
 ## Usage
-You can share visible area of viewing page on click yabumi icon.
+You can capture & share visible area of viewing page on click yabumi icon.
 You can also capture entire page and selected area of viewing page via context menu.
 The action when click yabumi icon (called default action) is configurable.
 
