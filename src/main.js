@@ -54,6 +54,9 @@ function doDefaultAction () {
             case 'captureEntirePage':
                 doCaptureEntirePage();
                 break;
+            case 'captureSelectedArea':
+                doCaptureSelectedArea();
+                break;
             case 'captureVisibleArea':
             default:
                 doCaptureVisibleArea();
