@@ -65,8 +65,8 @@
             mask.style.position = 'absolute';
             mask.style.top = 0;
             mask.style.left = 0;
-            mask.style.width = document.documentElement.scrollWidth + 'px';
-            mask.style.height = document.documentElement.scrollHeight + 'px';
+            mask.style.width = Math.max(document.documentElement.scrollWidth, document.documentElement.clientWidth) + 'px';
+            mask.style.height = Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight) + 'px';
             mask.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
             mask.style.cursor = 'crosshair';
             mask.id = 'yabumi-for-chrome-selected-area-capturing-mask';
