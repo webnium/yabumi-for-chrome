@@ -13,8 +13,8 @@
         f: {
             measureScreen: function (callback) {
                 callback({
-                    width: document.documentElement.clientWidth,
-                    height: document.documentElement.clientHeight,
+                    width: Math.min(document.documentElement.clientWidth, window.innerWidth),
+                    height: Math.min(document.documentElement.clientHeight, window.innerHeight),
                     pixelRatio: window.devicePixelRatio
                 });
             },
